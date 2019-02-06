@@ -71,7 +71,7 @@ module.exports = class extends Generator {
                 return generator.prompt({
                     type: 'confirm',
                     name: 'createSourcesFolder',
-                    message: 'Would you like to create a \'sources\' folder to contain your campaign documents?'
+                    message: 'Would you like to create a \'source\' folder to contain your campaign documents?'
                 }).then(createSourcesFolderAnswer => {
                     generator.campaignConfig.createSourcesFolder = createSourcesFolderAnswer.createSourcesFolder;
                 });
@@ -105,6 +105,42 @@ module.exports = class extends Generator {
                 }).then(createComponentsFolderAnswer => {
                     generator.campaignConfig.createComponentsFolder = createComponentsFolderAnswer.createComponentsFolder;
                 });
+            },
+            askIfGenerateExampleSource: () => {
+                if (!generator.campaignConfig.createSourcesFolder) {
+                    return Promise.resolve();
+                }
+                return generator.prompt({
+                    type: 'confirm',
+                    name: 'generateExampleSource',
+                    message: 'Would you like to generate an example campaign document?'
+                }).then(generateExampleSourceAnswer => {
+                    generator.campaignConfig.generateExampleSource = generateExampleSourceAnswer.generateExampleSource;
+                });
+            },
+            askIfGenerateExampleTemplate: () => {
+                if (!generator.campaignConfig.createTemplatesFolder) {
+                    return Promise.resolve();
+                }
+                return generator.prompt({
+                    type: 'confirm',
+                    name: 'generateExampleTemplate',
+                    message: 'Would you like to generate an example template file?'
+                }).then(generateExampleTemplateAnswer => {
+                    generator.campaignConfig.generateExampleTemplate = generateExampleTemplateAnswer.generateExampleTemplate;
+                });
+            },
+            askIfGenerateExampleComponent: () => {
+                if (!generator.campaignConfig.createComponentsFolder) {
+                    return Promise.resolve();
+                }
+                return generator.prompt({
+                    type: 'confirm',
+                    name: 'generateExampleComponent',
+                    message: 'Would you like to generate an example component data file?'
+                }).then(generateExampleComponentAnswer => {
+                    generator.campaignConfig.generateExampleComponent = generateExampleComponentAnswer.generateExampleComponent;
+                });
             }
         };
 
@@ -125,7 +161,7 @@ module.exports = class extends Generator {
         let context = this.campaignConfig;
 
         if (context.createSourcesFolder) {
-            this.campaignConfig.sourceFolders.push('./sources');
+            this.campaignConfig.sourceFolders.push('./source');
         }
         if (context.createTemplatesFolder) {
             this.campaignConfig.templateFolders.push('./templates');
@@ -134,10 +170,14 @@ module.exports = class extends Generator {
             this.campaignConfig.componentFolders.push('./components');
         }
 
-        this.fs.copyTpl(this.sourceRoot() + '/dmbinder/campaign.json', context.campaignFolder + '/.dmbinder/campaign.json', context)
+        this.fs.copy(this.sourceRoot() + '/vscode', context.campaignFolder + '/.vscode');
+        this.fs.copyTpl(this.sourceRoot() + '/dmbinder/campaign.json', context.campaignFolder + '/.dmbinder/campaign.json', context);
 
         if (context.createSourcesFolder) {
-            mkdirp(path.join(context.campaignFolder, 'sources'));
+            mkdirp(path.join(context.campaignFolder, 'source'));
+            if (context.generateExampleSource) {
+                this.fs.copy(this.sourceRoot() + '/Homebrew-Basics.md', context.campaignFolder + '/source/Homebrew-Basics.md');
+            }
         }
         if (context.createTemplatesFolder) {
             mkdirp(path.join(context.campaignFolder, 'templates'));
