@@ -1,0 +1,6 @@
+{
+    "campaignName": <%- JSON.stringify(campaignName) %>,
+    "sources": <%- JSON.stringify(sourceFolders, null, 4).replace(/\n/g, '\n    ') %>,
+    "templates": <%- JSON.stringify(templateFolders, null, 4).replace(/\n/g, '\n    ') %>,
+    "components": <%- JSON.stringify(componentFolders, null, 4).replace(/\n/g, '\n    ') %>
+}
