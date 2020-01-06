@@ -1,0 +1,372 @@
+{
+    "title": "jsnee's DMBinder Custom Component Schema",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "templateItem": {
+            "description": "The DMBinder template to use for this component",
+            "type": "string",
+            "enum": [
+                "monster-stat-block",
+                "monster-stat-block_narrow"
+            ]
+        }
+    },
+    "required": [
+        "templateItem"
+    ],
+    "definitions": {
+        "mod": {
+            "type": "string",
+            "pattern": "^([+-]\\d+|0)$"
+        },
+        "abilityStat": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "type": "number"
+                },
+                "mod": {
+                    "$ref": "#/definitions/mod"
+                }
+            },
+            "required": [
+                "base",
+                "mod"
+            ]
+        },
+        "action": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        ],
+                        "default": ""
+                    }
+                }
+            }
+        },
+        "fancyNumber": {
+            "type": "string",
+            "pattern": "^\\d{1,3}(,\\d{3})*$"
+        },
+        "numberOrFraction": {
+            "type": "string",
+            "pattern": "^-?\\d+(/\\d+)?$"
+        },
+        "damageTypes": {
+            "anyOf": [
+                {
+                    "enum": [
+                        "Acid",
+                        "Bludgeoning",
+                        "Cold",
+                        "Fire",
+                        "Force",
+                        "Lightning",
+                        "Necrotic",
+                        "Piercing",
+                        "Poison",
+                        "Psychic",
+                        "Radiant",
+                        "Slashing",
+                        "Thunder"
+                    ]
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "diceRoll": {
+            "type": "string",
+            "pattern": "^(\\d+d\\d+)( [+-] \\d+d\\d+)*( [+-] \\d+)?$"
+        }
+    },
+    "oneOf": [
+        {
+            "properties": {
+                "templateItem": {
+                    "type": "string",
+                    "enum": [
+                        "monster-stat-block",
+                        "monster-stat-block_narrow"
+                    ]
+                },
+                "name": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string",
+                    "enum": [
+                        "Fine",
+                        "Diminutive",
+                        "Tiny",
+                        "Small",
+                        "Medium",
+                        "Large",
+                        "Huge",
+                        "Gargantuan",
+                        "Colossal"
+                    ]
+                },
+                "type": {
+                    "type": "string"
+                },
+                "classification": {
+                    "type": "string"
+                },
+                "subtype": {
+                    "type": "string"
+                },
+                "alignment": {
+                    "type": "string",
+                    "enum": [
+                        "Lawful Evil",
+                        "Neutral Evil",
+                        "Chaotic Evil",
+                        "Lawful Neutral",
+                        "Neutral Neutral",
+                        "Chaotic Neutral",
+                        "Lawful Good",
+                        "Neutral Good",
+                        "Chaotic Good",
+                        "Unaligned"
+                    ]
+                },
+                "ac": {
+                    "type": "object",
+                    "properties": {
+                        "base": {
+                            "type": "number"
+                        },
+                        "breakdown": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "base"
+                    ]
+                },
+                "hp": {
+                    "type": "object",
+                    "properties": {
+                        "base": {
+                            "type": "number"
+                        },
+                        "roll": {
+                            "$ref": "#/definitions/diceRoll"
+                        }
+                    },
+                    "required": [
+                        "base"
+                    ]
+                },
+                "speed": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "str": {
+                    "$ref": "#/definitions/abilityStat"
+                },
+                "dex": {
+                    "$ref": "#/definitions/abilityStat"
+                },
+                "con": {
+                    "$ref": "#/definitions/abilityStat"
+                },
+                "int": {
+                    "$ref": "#/definitions/abilityStat"
+                },
+                "wis": {
+                    "$ref": "#/definitions/abilityStat"
+                },
+                "cha": {
+                    "$ref": "#/definitions/abilityStat"
+                },
+                "saves": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "enum": [
+                                    "STR",
+                                    "DEX",
+                                    "CON",
+                                    "INT",
+                                    "WIS",
+                                    "CHA"
+                                ]
+                            },
+                            "mod": {
+                                "$ref": "#/definitions/mod"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "mod"
+                        ]
+                    }
+                },
+                "skills": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "anyOf": [
+                                    {
+                                        "enum": [
+                                            "Acrobatics",
+                                            "Animal Handling",
+                                            "Arcana",
+                                            "Athletics",
+                                            "Deception",
+                                            "History",
+                                            "Insight",
+                                            "Intimidation",
+                                            "Investigation",
+                                            "Medicine",
+                                            "Nature",
+                                            "Perception",
+                                            "Performance",
+                                            "Persuasion",
+                                            "Religion",
+                                            "Sleight of Hand",
+                                            "Stealth"
+                                        ]
+                                    },
+                                    {
+                                        "type": "string"
+                                    }
+                                ]
+                            },
+                            "mod": {
+                                "$ref": "#/definitions/mod"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "mod"
+                        ]
+                    }
+                },
+                "damageVulnerabilities": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/damageTypes"
+                    }
+                },
+                "damageImmunities": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/damageTypes"
+                    }
+                },
+                "damageResistances": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/damageTypes"
+                    }
+                },
+                "conditionImmunities": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "anyOf": [
+                            {
+                                "enum": [
+                                    "Blinded",
+                                    "Charmed",
+                                    "Deafened",
+                                    "Fatigued",
+                                    "Frightened",
+                                    "Grappled",
+                                    "Incapacitated",
+                                    "Invisible",
+                                    "Paralyzed",
+                                    "Petrified",
+                                    "Poisoned",
+                                    "Prone",
+                                    "Restrained",
+                                    "Stunned",
+                                    "Unconscious",
+                                    "Exhaustion"
+                                ]
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    }
+                },
+                "senses": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "languages": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "challenge": {
+                    "type": "object",
+                    "properties": {
+                        "rating": {
+                            "$ref": "#/definitions/numberOrFraction"
+                        },
+                        "xp": {
+                            "$ref": "#/definitions/fancyNumber"
+                        }
+                    },
+                    "required": [
+                        "rating",
+                        "xp"
+                    ]
+                },
+                "abilities": {
+                    "$ref": "#/definitions/action"
+                },
+                "actions": {
+                    "$ref": "#/definitions/action"
+                },
+                "reactions": {
+                    "$ref": "#/definitions/action"
+                },
+                "legendaryActions": {
+                    "$ref": "#/definitions/action"
+                }
+            },
+            "required": ["name"]
+        }
+    ]
+}

@@ -2,5 +2,7 @@
     "campaignName": <%- JSON.stringify(campaignName) %>,
     "sourcePaths": <%- JSON.stringify(sourceFolders, null, 4).replace(/\n/g, '\n    ') %>,
     "templatePaths": <%- JSON.stringify(templateFolders, null, 4).replace(/\n/g, '\n    ') %>,
-    "componentPaths": <%- JSON.stringify(componentFolders, null, 4).replace(/\n/g, '\n    ') %>
+    "componentPaths": <%- JSON.stringify(componentFolders, null, 4).replace(/\n/g, '\n    ') %>,
+    "generatorPaths": <%- JSON.stringify(generatorFolders, null, 4).replace(/\n/g, '\n    ') %>,
+    "outDirectory": <%- outputFolder ? JSON.stringify(outputFolder) : null %>
 }
